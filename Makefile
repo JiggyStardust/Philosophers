@@ -9,8 +9,6 @@ BLUE 			= \033[0;94m
 BLUE_BOLD 		= \033[1;94m
 
 OBJ_READY		= echo "📥 $(ORANGE)Compiled philo files!$(RESET)"
-COMP_LIBFT		= echo "📝 $(YELLOW)Compiling Libft...$(RESET)"
-LIBFT_READY		= echo "📝 $(YELLOW_BOLD)Libft compiled!$(RESET)"
 MS_READY		= echo "🤖 $(GREEN)philo ready!$(RESET)"
 CLEANING		= echo "💧 $(CYAN)Cleaning...$(RESET)"
 CLEANED			= echo "💧 $(CYAN_BOLD)Successfully cleaned all object files!$(RESET)"
@@ -22,47 +20,37 @@ NAME			= philo
 
 SRCDIR			= srcs
 OBJDIR			= objs
-LIBDIR			= libft
 INCLUDE			= includes
 
 CFLAGS			= -Wall -Wextra -Werror -I $(INCLUDE)
-LIBFT			= $(LIBDIR)/libft.a
 
-SRCS			= $(SRCDIR)/main.c \
+SRCS			=	$(SRCDIR)/main.c \
+					$(SRCDIR)/ft_atoi.c \
 
 OBJS			= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-all: $(LIBFT) $(NAME)
-
-$(LIBFT):
-	@$(COMP_LIBFT)
-	@make -s -C $(LIBDIR) > /dev/null
-	@$(LIBFT_READY)
+all: $(NAME)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
 	@cc -c $(CFLAGS) $< -o $@
 
 $(NAME): $(OBJS)
-	@cc $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	@cc $(CFLAGS) $(OBJS) -o $(NAME)
 	@$(OBJ_READY)
 	@chmod 777 $(NAME)
 	@$(MS_READY)
 
 clean:
 	@$(CLEANING)
-	@rm -rf $(OBJDIR)
-	@make clean -s -C $(LIBDIR)
-	@$(CLEANED)
+	@rm -rf
 
 fclean: clean
 	@$(FCLEANING)
 	@rm -rf $(NAME)
-	@make fclean -s -C $(LIBDIR)
-	@rm -rf libft.a
 	@$(FCLEANED)
 
 re:	fclean all
 	@$(REMAKE)
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re
