@@ -47,7 +47,7 @@ int	ft_atoi_error(char *str, int *err)
 	i = 0;
 	result = 0;
 	check = result;
-	if ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32)) // can it contain w
+	if ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32)) // can it contain whitespace?
 		i++;
 	if (!valid_argument(str + i))
 	{
@@ -64,29 +64,89 @@ int	ft_atoi_error(char *str, int *err)
 	return ((int)result);
 }
 
-t_philo	*init_philos(char **av)
+int		assign_data_nums(char *av, t_data *data)
 {
-	t_philo	*philo;
+	int	err;
+
+	err = 0;
+	data->num_philos = ft_atoi_error(av[1], &err);
+	if (err)
+		return (0);
+	data->time_dies = ft_atoi_error(av[2], &err);
+	if (err)
+		return (0);
+	data->time_eat = ft_atoi_error(av[3], &err);
+	if (err)
+		return (0);
+	data->time_sleeps = ft_atoi_error(av[4], &err);
+	if (av[5])
+		data->num_must_eat = ft_atoi_error(av[5], &err);
+	else
+		data->num_must_eat = -1; // or 0?
+	if (err)
+		return (0);
+	else
+		return (1);
+}
+
+void	free_destroy_forks(pthread_mutex_t *forks, int i)
+{
+	while (i >= 0)
+	{
+		pthread_mutex_destroy(&forks[i]);
+		i--;
+	}
+	free(forks);
+}
+
+pthread_mutex_t	*assign_forks(t_data *data)
+{
+	pthread_mutex_t	*forks;
+	int	i;
+
+	i = 0;
+	forks = malloc(sizeof(pthread_mutex_t) * data->num_philos);
+	if (!forks)
+		return (NULL);
+	while (i < data->num_philos)
+	{
+		if (pthread_mutex_init(&forks[i], NULL) != 0);
+		{
+			free_destroy_forks(forks, i - 1);
+			return (NULL);
+		}
+		i++;
+	}
+	return (forks);
+}
+
+t_data	*init_data(char **av)
+{
+	t_data	*data;
 	int		err;
 
 	err = 0;
-	philo = malloc(sizeof(t_philo));
-	if (!philo)
+	data = malloc(sizeof(t_data));
+	if (!data)
 		return (NULL);
-	philo->philos = ft_atoi_error(av[1], &err);
-	philo->death = ft_atoi_error(av[2], &err);
-	philo->eat = ft_atoi_error(av[3], &err);
-	philo->sleep = ft_atoi_error(av[4], &err);
-	if (av[5])
-		philo->meals = ft_atoi_error(av[5], &err);
-	if (err)
+	if (!assign_data_nums(av, data))
 	{
-		free(philo);
+		free (data);
 		return (NULL);
 	}
-	else
-		philo->meals = 0;
-	return (philo);
+	data->philo_died = false;
+	data->forks = assign_forks(data);
+	return (data);
+}
+
+t_philo	*init_philos(char **av)
+{
+	t_data	data;
+
+	data = init_data(av);
+	if (!data)
+		return (NULL);
+	
 }
 
 int	main(int ac, char **av)
@@ -95,11 +155,9 @@ int	main(int ac, char **av)
 	struct timeval	start;
 	// int		i;
 	t_philo	*philo;
-	pthread_mutex_t	mutex;
 
 	// i = 0;
 	// pthread_t	philo[i];
-	pthread_mutex_init(&mutex, NULL);
 	if (ac < 5 || ac > 6)
 	{
 		invalid_argument_amount();
@@ -118,7 +176,7 @@ int	main(int ac, char **av)
 		if (gettimeofday(&tv, NULL) == -1)
 			printf("An error occured, didn't catch the time.\n");
 		else
-			printf("It's been %ld milliseconds since this program started.\n", (tv.tv_usec - start.tv_usec) / 1000);
+			printf("It's been %ld milliseconds since this program started.\n", (tv.tv_usec * - start.tv_usec) / 1000);
 	}
 	printf("atoi with nonnumbers: %d\n", atoi("3683209"));
 	pthread_mutex_destroy(&mutex);
