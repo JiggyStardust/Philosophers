@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosophers.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/06 16:28:26 by sniemela          #+#    #+#             */
+/*   Updated: 2025/02/06 16:56:40 by sniemela         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
@@ -16,8 +28,8 @@ typedef struct s_data
 	int				time_dies;
 	int				num_philos;
 	int				num_must_eat;
+	int				start_time;
 	bool			philo_died;
-	long long		start_time;
 	pthread_mutex_t	*forks;
 }	t_data;
 
@@ -31,6 +43,27 @@ typedef struct s_philo
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 }	t_philo;
+
+/******************************************************************************
+ * Checks if there's a valid amount of arguments, but doesn't check the 
+ * validity of them (happens later)
+******************************************************************************/
+int	argument_check(int ac);
+
+/******************************************************************************
+ * Assign all int values inside @param s_data struct. Arguments (char argv[i]) 
+ * are checked and turned into ints using a static function ft_atoi_error().
+ * @param start_time we get by calling get_time_ms() function.
+ *****************************************************************************/
+int	assign_data_nums(char **av, t_data *data);
+
+/******************************************************************************
+ * Returns the current time in milliseconds by calling gettimeofday() and
+ * converting the result into milliseconds.
+ *****************************************************************************/
+int	get_time_ms(void);
+
+
 
 int	ft_atoi(const char *str);
 #endif

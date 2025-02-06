@@ -25,7 +25,7 @@ INCLUDE			= includes
 CFLAGS			= -Wall -Wextra -Werror -I $(INCLUDE)
 
 SRCS			=	$(SRCDIR)/main.c \
-					$(SRCDIR)/ft_atoi.c \
+					$(SRCDIR)/assign_data_nums.c \
 
 OBJS			= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
