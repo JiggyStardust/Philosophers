@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:28:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/06 16:56:40 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/07 17:11:11 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,17 @@ int	assign_data_nums(char **av, t_data *data);
  *****************************************************************************/
 int	get_time_ms(void);
 
+/******************************************************************************
+ * Destroys fork mutexes, free's *forks and ultimately frees t_data struct.
+ ******************************************************************************/
+void	free_data(t_data *data);
 
+void	cleanup_philo(t_philo *philo, int i);
 
-int	ft_atoi(const char *str);
+void	free_destroy_forks(pthread_mutex_t *forks, int i);
+
+t_data	*init_data(char **av);
+
+pthread_mutex_t	*assign_forks(t_data *data);
+
 #endif

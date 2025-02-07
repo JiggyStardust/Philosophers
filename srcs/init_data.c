@@ -1,26 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/06 16:15:06 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/06 16:56:17 by sniemela         ###   ########.fr       */
+/*   Created: 2025/02/07 17:08:30 by sniemela          #+#    #+#             */
+/*   Updated: 2025/02/07 17:09:34 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-void	free_destroy_forks(pthread_mutex_t *forks, int i)
-{
-	while (i >= 0)
-	{
-		pthread_mutex_destroy(&forks[i]);
-		i--;
-	}
-	free(forks);
-}
 
 pthread_mutex_t	*assign_forks(t_data *data)
 {
@@ -48,7 +38,7 @@ int	get_time_ms(void)
 	int				time;
 	struct timeval	tv;
 
-	if (gettimeofday(&tv, NULL) == 0)
+	if (gettimeofday(&tv, NULL) != 0)
 	{
 		printf("Couldn't get current time.\n");
 		return (0);
@@ -79,30 +69,4 @@ t_data	*init_data(char **av)
 		return (NULL);
 	}
 	return (data);
-}
-/*
-t_philo	*init_philos(t_data *data)
-{
-	t_philo	*philo;
-}
-*/
-
-int	main(int ac, char **av)
-{
-	t_data	*data;
-	t_philo	*philo;
-
-	philo = NULL;
-	if (!argument_check(ac))
-		return (1);
-	data = init_data(av);
-	if (!data)
-		return (1);
-	// philo = init_philos(data);
-	if (!philo)
-	{
-//		free_data(data);
-		return (1);
-	}
-	return (0);
 }
