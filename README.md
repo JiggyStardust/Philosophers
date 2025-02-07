@@ -40,3 +40,21 @@ it yet, and there might be more mutexes incoming (like a mutex for printing)
 as my comprehension evolves and the needs are identified.
 - It makes/compiles.
 ----------------------------------------------------------------
+7th of February
+----------------------------------------------------------------
+
+New functions:
+- free_data(), which succesfully removes any memory allocated in
+data struct and destroys fork mutexes.
+- init_philos(), which initializes t_philo struct and assigns all values possible at the moment,
+and creates pthreads (so the routine starts running there).
+
+- I also sketched up monitoring(), thinking() and sleeping(), to see if the program is running
+at all at this point. It runs succesfully.
+
+Next:
+- I need to figure out whether I need more mutex lock to avoid printing the thinking part too oten OR
+is the upcoming eating() function with it's fork locks taking care of it for me. Will the philos wait
+patiently until the fork is unlocked...?
+- I need to figure out logic so that philos will avoid dying; the even numbers could start eating first... maybe...?
+OR is it necessary...?
