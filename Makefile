@@ -45,7 +45,7 @@ $(NAME): $(OBJS)
 
 clean:
 	@$(CLEANING)
-	@rm -rf
+	@rm -rf $(OBJS)
 
 fclean: clean
 	@$(FCLEANING)
