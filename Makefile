@@ -24,7 +24,8 @@ INCLUDE			= includes
 
 CFLAGS			= -Wall -Wextra -Werror -I $(INCLUDE)
 
-SRCS			=	$(SRCDIR)/assign_data_nums.c \
+SRCS			=	$(SRCDIR)/actions.c \
+					$(SRCDIR)/assign_data_nums.c \
 					$(SRCDIR)/free_and_destroy.c \
 					$(SRCDIR)/init_data.c \
 					$(SRCDIR)/philo.c \

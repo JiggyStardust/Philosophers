@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 17:08:30 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/07 17:09:34 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/08 12:30:35 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,12 @@ t_data	*init_data(char **av)
 		return (NULL);
 	}
 	data->philo_died = false;
+	data->quit = false;
+	if (pthread_mutex_init(&data->print, NULL) != 0)
+	{
+		free(data);
+		return (NULL);
+	}
 	data->forks = assign_forks(data);
 	if (!data->forks)
 	{

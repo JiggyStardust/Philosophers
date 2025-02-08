@@ -66,41 +66,6 @@ OR is it necessary...?
 New functions:
 - eating(): I sketched up this first version in 10 minutes and I'm proud of it - there's just something about a
 fresh morning brain.
-```int	eating(t_philo *philo)
-{
-	if (philo->data->philo_died)
-		return (0);
-	if (get_time_ms() - philo->last_meal_time >= philo->data->time_dies)
-	{
-		philo->data->philo_died = true ;
-		return (0);
-	}
-	if (philo->id % 2 == 1)
-	{
-		if (pthread_mutex_lock(philo->left_fork) != 0)
-			return (0);
-		printf("%d %d has taken a fork\n", get_time_ms() - philo->data->start_time, philo->id);
-		if (pthread_mutex_lock(philo->right_fork) != 0)
-			return (0);
-	}
-	else
-	{
-		if (pthread_mutex_lock(philo->right_fork) != 0)
-			return (0);
-		printf("%d %d has taken a fork\n", get_time_ms() - philo->data->start_time, philo->id);
-		if (pthread_mutex_lock(philo->left_fork) != 0)
-			return (0);
-	}
-	printf("%d %d is eating\n", get_time_ms() - philo->data->start_time, philo->id);
-	usleep(philo->data->time_eats * 1000);
-	philo->last_meal_time = get_time_ms();
-	if (pthread_mutex_unlock(philo->left_fork) != 0)
-		return (0);
-	if (pthread_mutex_unlock(philo->right_fork) != 0)
-		return (0);
-	return (1);
-}```
-
 - I also added checks to the beginning of every action functions beginning to check, whether philo_died flag
 is true, or whether too much time has passed since the last meal, so the while loop inside the routine doesn't
 get delays until monitoring is checked again.
@@ -112,3 +77,31 @@ Need to do:
 - to make that nothing happens after a philo has died
 - separate last_meal checks and meals_eaten checks to a separate function to save space
 - see whether is leaks - I've heard there can be difficulties running philos with valgrind
+
+----------------------------------------------------------------
+8th of February 2nd commit
+----------------------------------------------------------------
+
+PROBLEM:
+
+./philo 2 50 500 50
+0 1 is thinking
+1 1 has taken a fork
+1 1 is eating
+0 2 is thinking
+501 1 is sleeping.
+501 2 died
+
+Should behave like:
+./philo 2 50 500 50
+0 1 is thinking
+1 1 has taken a fork
+1 1 is eating
+0 2 is thinking
+50 2 died
+
+Right now my program and monitoring logic is in trouble, because philo 2 try's to unlock a fork mutex and waits
+until nro1 unlocks the fork - by the time it has happened it's been 500ms, because it's the time to eat. But nro 2 should die
+while waiting for the fork. We can't use pthread_mutex_trylock, and unlocking wait's until it succeeds. So I need to
+change my logic.
+
