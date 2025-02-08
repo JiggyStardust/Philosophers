@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:28:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/07 17:11:11 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/08 10:23:17 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_philo
 {
 	int				id;
 	int				meals_eaten;
+	bool			is_thinking;
 	long long		last_meal_time;
 	pthread_t		thread;
 	struct s_data	*data;
