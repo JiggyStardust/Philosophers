@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:15:06 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/08 10:50:28 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/08 11:00:15 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	thinking(t_philo *philo)
 		printf("%d %d is thinking\n", get_time_ms() - philo->data->start_time, philo->id);
 		philo->is_thinking = true;
 	}
-
 }
 
 int	eating(t_philo *philo)
@@ -70,7 +69,6 @@ int	eating(t_philo *philo)
 	if (pthread_mutex_unlock(philo->right_fork) != 0)
 		return (0);
 	return (1);
-
 }
 
 void	sleeping(t_philo *philo)
@@ -84,6 +82,7 @@ void	sleeping(t_philo *philo)
 	}
 	printf("%d %d is sleeping.\n", get_time_ms() - philo->data->start_time, philo->id);
 	usleep(philo->data->time_sleeps * 1000);
+	philo->is_thinking = false;
 }
 
 void	*routine(void *arg)
