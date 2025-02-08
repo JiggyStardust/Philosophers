@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 14:33:35 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/07 17:10:53 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/08 11:07:53 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	free_data(t_data *data)
 	free_destroy_forks(data->forks, data->num_philos - 1);
 	free(data);
 }
+
 void	cleanup_philo(t_philo *philo, int i)
 {
 	while (i >= 0)
