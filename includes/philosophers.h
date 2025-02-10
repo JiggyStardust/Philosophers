@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:28:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/08 12:46:35 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:06:19 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_data
 	bool			philo_died;
 	bool			quit;
 	pthread_mutex_t	print;
+	pthread_mutex_t	lock;
 	pthread_mutex_t	*forks;
 }	t_data;
 
@@ -81,7 +82,7 @@ void	free_data(t_data *data);
 /******************************************************************************
  * Destroys the threads by calling pthread_join() and frees the t_philo struct.
 ******************************************************************************/
-void	cleanup_philo(t_philo *philo, int i);
+void	cleanup_philo(t_philo **philo, int i);
 
 /******************************************************************************
  * Destroys fork mutexes by calling pthread_mutex_destroy() frees *forks array.

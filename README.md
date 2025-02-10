@@ -105,3 +105,21 @@ until nro1 unlocks the fork - by the time it has happened it's been 500ms, becau
 while waiting for the fork. We can't use pthread_mutex_trylock, and unlocking wait's until it succeeds. So I need to
 change my logic.
 
+----------------------------------------------------------------
+10th of February
+----------------------------------------------------------------
+
+Don't want to jinx anything but I seem to be on fire!
+
+Ran philo today for the first time with:
+valgrind --tool=helgrind 
+Which checks for possible data races and reports them as errors.
+
+Managed to get from over 30 errors to 0 errors when running with
+100 philos. To achieve this:
+- I added one more mutex called "lock".
+- I use this lock when ever I'm reading or writing into a struct that's also possibly inspected by other threads.
+
+- In addition to this I needed to exted the usage of printf being protected by the same pthread_mutex_t print that is guarding the "xx philo x died" printing.
+
+There were also some bigger logical issues with my program. I preveiously had the monitoring inside the thread's routine loop, but now it's in the main, and it's tracking philos death. I need to still add the meals_eaten into the conditions, so the simumlation/routine stops if all the philos are full.

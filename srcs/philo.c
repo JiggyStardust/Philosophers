@@ -6,31 +6,32 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:15:06 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/08 13:38:31 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:15:34 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int		monitoring(t_philo *philo)
-{
-	if (philo->data->quit)
-		return (0);
-	if (philo->data->philo_died)
-	{
-		if (!philo->data->quit && pthread_mutex_lock(&philo->data->print) == 0)
-		{
-			if (!philo->data->quit)
-			{
-				printf("%d %d died\n", get_time_ms() - philo->data->start_time, philo->id);
-				philo->data->quit = true;
-			}
-			pthread_mutex_unlock(&philo->data->print);
-		}
-		return (0);
-	}
-	return (1);
-}
+// int		monitoring(t_philo *philo, t_data *data)
+// {
+// 	if (philo->data->quit)
+// 		return (0);
+// 	if (philo->data->philo_died)
+// 	{
+// 		if (!philo->data->quit && pthread_mutex_lock(&philo->data->print) == 0)
+// 		{
+// 			if (!philo->data->quit)
+// 			{
+// 				printf("%d %d died\n",get_time_ms() - philo->data->start_time,
+// 				philo->id);
+// 				philo->data->quit = true;
+// 			}
+// 			pthread_mutex_unlock(&philo->data->print);
+// 		}
+// 		return (0);
+// 	}
+// 	return (1);
+// }
 
 void	*routine(void *arg)
 {
@@ -39,58 +40,109 @@ void	*routine(void *arg)
 
 	philo = (t_philo *)arg;
 	i = 0;
-	while (monitoring(philo))
+	while (true)
 	{
 		thinking(philo);
 		if (eating(philo))
 			sleeping(philo);
+		if (philo_died(philo))
+			break ;
 	}
 	return (NULL);
 }
 
-t_philo	*init_philos(t_data *data)
+t_philo	**init_philos(t_data *data)
 {
-	t_philo	*philo;
+	t_philo	**philo;
 	int		i;
 
 	i = 0;
-	philo = malloc(sizeof(t_philo) * data->num_philos);
+	philo = malloc(sizeof(t_philo *) * data->num_philos);
 	if (!philo)
 		return (NULL);
 	while (i < data->num_philos)
 	{
-		philo[i].id = i + 1;
-		philo[i].data = data;
-		philo[i].right_fork = &data->forks[i];
+		philo[i] = malloc(sizeof(t_philo));
+		philo[i]->id = i + 1;
+		philo[i]->data = data;
+		philo[i]->right_fork = &data->forks[i];
 		if (i == 0)
-			philo[i].left_fork = &data->forks[data->num_philos - 1];
+			philo[i]->left_fork = &data->forks[data->num_philos - 1];
 		else
-			philo[i].left_fork = &data->forks[i - 1];
-		philo[i].last_meal_time = get_time_ms();
-		philo[i].meals_eaten = 0;
-		philo[i].is_thinking = false;
-		if (pthread_create(&philo[i].thread, NULL, &routine, (void *)&philo[i]) != 0)
+			philo[i]->left_fork = &data->forks[i - 1];
+		philo[i]->last_meal_time = get_time_ms();
+		philo[i]->meals_eaten = 0;
+		philo[i]->is_thinking = false;
+		if (pthread_create(&philo[i]->thread, NULL, &routine, (void *)philo[i]) != 0)
 		{
 			cleanup_philo(philo, i - 1);
 			return (NULL);
 		}
 		i++;
 	}
+	return (philo);
+}
+
+bool	philo_starved(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->lock);
+	if (get_time_ms() - philo->last_meal_time >= philo->data->time_dies)
+	{
+		pthread_mutex_unlock(&philo->data->lock);
+		return (true);
+	}
+	else
+	{
+		pthread_mutex_unlock(&philo->data->lock);
+		return (false);
+	}
+}
+
+bool	philo_dead(t_philo **philo, t_data *data)
+{
+	int	i;
+
 	i = 0;
 	while (i < data->num_philos)
 	{
-		pthread_join(philo[i].thread, NULL);
+		if (philo_starved(philo[i]))
+		{
+			pthread_mutex_lock(&data->lock);
+			data->philo_died = true;
+			pthread_mutex_unlock(&data->lock);
+			if (!data->quit && pthread_mutex_lock(&data->print) == 0)
+			{
+				if (!data->quit)
+				{
+					printf("%d %d died\n", get_time_ms() - data->start_time,
+					philo[i]->id);
+					data->quit = true;
+				}
+				pthread_mutex_unlock(&data->print);
+			}
+			return (true);
+		}
 		i++;
 	}
-	return (philo);
+	return (false);
+}
+
+void	monitoring(t_philo **philo, t_data *data)
+{
+	while (1)
+	{
+		if (philo_dead(philo, data))
+			break ;
+		// (philos_full(philo))
+		// return ;
+	}
 }
 
 int	main(int ac, char **av)
 {
 	t_data	*data;
-	t_philo	*philo;
+	t_philo	**philo;
 
-	philo = NULL;
 	if (!argument_check(ac))
 		return (1);
 	data = init_data(av);
@@ -102,7 +154,8 @@ int	main(int ac, char **av)
 		free_data(data);
 		return (1);
 	}
-	cleanup_philo(philo, data->num_philos -1);
+	monitoring(philo, data);
+	cleanup_philo(philo, data->num_philos - 1);
 	free_data(data);
 	return (0);
 }
