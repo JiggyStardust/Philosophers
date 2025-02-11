@@ -1,6 +1,6 @@
 # Philosophers
 
-This project is about learning the basics of threading in a process.
+Work in process. This project is about learning the basics of threading in a process.
 
 Started working on this with my MacOS on Saturday 25th of Jan.
 - Makefile
@@ -138,7 +138,11 @@ checks whether we should end running the simulation.
 ----------------------------------------------------------------
 
  [❌] Argument value check for 0 - not running the program when set for time of death, philos, or num_must_eat
+ 
  [❌] ft_sleep
+ 
  [❌] split bigger functions
+ 
  [✔️] data races
+ 
  [❌] **philo -> *philo (no point in having a double array anymore)
