@@ -1,4 +1,4 @@
-# Philosophers
+# Philosophers (work in process)
 
 This project is about learning the basics of threading in a process.
 
