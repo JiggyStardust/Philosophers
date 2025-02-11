@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:28:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/11 14:21:41 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 15:12:48 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,11 @@ t_data	*init_data(char **av);
 bool	take_second_fork(t_philo *philo);
 bool	take_first_fork(t_philo *philo);
 
+void	monitoring(t_philo *philo, t_data *data);
+bool	philos_are_full(t_philo *philo, t_data *data);
+bool	philo_is_full(t_philo *philo, t_data *data);
+bool	philo_dead(t_philo *philo, t_data *data);
+bool	philo_starved(t_philo *philo);
 
 bool	philo_quit(t_philo *philo); // not sure if keeping it
 int		eating(t_philo *philo);

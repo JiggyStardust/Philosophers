@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:13:58 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/07 14:47:04 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:52:34 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ static int(valid_argument(char *str))
 	}
 	else if (str[0] == '+' &&(str[1] < '0'|| str[1] > '9'))
 	{
-		printf("Argument value contained invalid characters.\n");
+		printf("Argument contained invalid characters.\n");
 		return (0);
 	}
 	while (str[i])
 	{
 		if (str[i] < '0'|| str[i] > '9')
 		{
-			printf("Argument(s) contained invalid characters.\n");
+			printf("Argument contained invalid characters.\n");
 			return (0);
 		}
 		i++;
@@ -75,10 +75,19 @@ static int	ft_atoi_error(char *str, int *err)
 	{
 		result = (result * 10) + (str[i] - '0');
 		i++;
-		if (check > result) // if it exceeds long, should this be done?
+		if (check > result)
 			return (-1);
 	}
 	return ((int)result);
+}
+bool	arg_is_zero(char *s, int n)
+{
+	if (n == 0)
+	{
+		printf("%s should be over 0\n", s);
+		return (true);
+	}
+	return (false);
 }
 
 int		assign_data_nums(char **av, t_data *data)
@@ -87,10 +96,10 @@ int		assign_data_nums(char **av, t_data *data)
 
 	err = 0;
 	data->num_philos = ft_atoi_error(av[1], &err);
-	if (err)
+	if (err || arg_is_zero("number_of_philosophers", data->num_philos))
 		return (0);
 	data->time_dies = ft_atoi_error(av[2], &err);
-	if (err)
+	if (err || arg_is_zero("time_to_die", data->time_dies))
 		return (0);
 	data->time_eats = ft_atoi_error(av[3], &err);
 	if (err)
@@ -99,8 +108,8 @@ int		assign_data_nums(char **av, t_data *data)
 	if (av[5])
 		data->num_must_eat = ft_atoi_error(av[5], &err);
 	else
-		data->num_must_eat = -1; // or 0?
-	if (err)
+		data->num_must_eat = -1;
+	if (err || arg_is_zero("minimum_meals", data->num_must_eat))
 		return (0);
 	data->start_time = get_time_ms();
 	if (!data->start_time)

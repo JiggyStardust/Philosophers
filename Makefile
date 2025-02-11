@@ -28,6 +28,7 @@ SRCS			=	$(SRCDIR)/actions.c \
 					$(SRCDIR)/assign_data_nums.c \
 					$(SRCDIR)/free_and_destroy.c \
 					$(SRCDIR)/init_data.c \
+					$(SRCDIR)/monitoring.c \
 					$(SRCDIR)/philo.c \
 					$(SRCDIR)/take_forks.c \
 
