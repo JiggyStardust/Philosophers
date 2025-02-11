@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:15:06 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/11 11:34:11 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:22:41 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,29 +30,33 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-t_philo	**init_philos(t_data *data)
+void	assign_philo_nums(t_philo *philo, int i)
 {
-	t_philo	**philo;
+	philo->id = i + 1;
+	philo->last_meal_time = get_time_ms();
+	philo->meals_eaten = 0;
+	philo->is_thinking = false;
+}
+
+t_philo	*init_philos(t_data *data)
+{
+	t_philo	*philo;
 	int		i;
 
 	i = 0;
-	philo = malloc(sizeof(t_philo *) * data->num_philos);
+	philo = malloc(sizeof(t_philo) * data->num_philos);
 	if (!philo)
 		return (NULL);
 	while (i < data->num_philos)
 	{
-		philo[i] = malloc(sizeof(t_philo));
-		philo[i]->id = i + 1;
-		philo[i]->data = data;
-		philo[i]->right_fork = &data->forks[i];
+		assign_philo_nums(&philo[i], i);
+		philo[i].data = data;
+		philo[i].right_fork = &data->forks[i];
 		if (i == 0)
-			philo[i]->left_fork = &data->forks[data->num_philos - 1];
+			philo[i].left_fork = &data->forks[data->num_philos - 1];
 		else
-			philo[i]->left_fork = &data->forks[i - 1];
-		philo[i]->last_meal_time = get_time_ms();
-		philo[i]->meals_eaten = 0;
-		philo[i]->is_thinking = false;
-		if (pthread_create(&philo[i]->thread, NULL, &routine, (void *)philo[i]) != 0)
+			philo[i].left_fork = &data->forks[i - 1];
+		if (pthread_create(&philo[i].thread, NULL, &routine, (void *)&philo[i]) != 0)
 		{
 			cleanup_philo(philo, i - 1);
 			return (NULL);
@@ -77,14 +81,14 @@ bool	philo_starved(t_philo *philo)
 	}
 }
 
-bool	philo_dead(t_philo **philo, t_data *data)
+bool	philo_dead(t_philo *philo, t_data *data)
 {
 	int	i;
 
 	i = 0;
 	while (i < data->num_philos)
 	{
-		if (philo_starved(philo[i]))
+		if (philo_starved(&philo[i]))
 		{
 			pthread_mutex_lock(&data->lock);
 			if (!data->quit && pthread_mutex_lock(&data->print) == 0)
@@ -92,7 +96,7 @@ bool	philo_dead(t_philo **philo, t_data *data)
 				if (!data->quit)
 				{
 					printf("%d %d died\n", get_time_ms() - data->start_time,
-					philo[i]->id);
+					philo[i].id);
 					data->quit = true;
 				}
 				pthread_mutex_unlock(&data->lock);
@@ -120,7 +124,7 @@ bool	philo_is_full(t_philo *philo, t_data *data)
 	return (ret);
 }
 
-bool	philos_are_full(t_philo **philo, t_data *data)
+bool	philos_are_full(t_philo *philo, t_data *data)
 {
 	int	fullness;
 	int	i;
@@ -129,7 +133,7 @@ bool	philos_are_full(t_philo **philo, t_data *data)
 	i = 0;
 	while (i < data->num_philos)
 	{
-		if (philo_is_full(philo[i], data))
+		if (philo_is_full(&philo[i], data))
 			fullness++;
 		if (fullness == data->num_philos)
 		{
@@ -143,7 +147,7 @@ bool	philos_are_full(t_philo **philo, t_data *data)
 	return (false);
 }
 
-void	monitoring(t_philo **philo, t_data *data)
+void	monitoring(t_philo *philo, t_data *data)
 {
 	while (1)
 	{
@@ -162,7 +166,7 @@ void	monitoring(t_philo **philo, t_data *data)
 int	main(int ac, char **av)
 {
 	t_data	*data;
-	t_philo	**philo;
+	t_philo	*philo;
 
 	if (!argument_check(ac))
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:28:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/11 10:33:48 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:21:41 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	free_data(t_data *data);
 /******************************************************************************
  * Destroys the threads by calling pthread_join() and frees the t_philo struct.
 ******************************************************************************/
-void	cleanup_philo(t_philo **philo, int i);
+void	cleanup_philo(t_philo *philo, int i);
 
 /******************************************************************************
  * Destroys fork mutexes by calling pthread_mutex_destroy() frees *forks array.

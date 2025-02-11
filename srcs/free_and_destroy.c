@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 14:33:35 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/10 16:09:04 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:23:40 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,15 @@ void	free_data(t_data *data)
 {
 	free_destroy_forks(data->forks, data->num_philos - 1);
 	pthread_mutex_destroy(&data->print);
+	pthread_mutex_destroy(&data->lock);
 	free(data);
 }
 
-void	cleanup_philo(t_philo **philo, int i)
+void	cleanup_philo(t_philo *philo, int i)
 {
 	while (i >= 0)
 	{
-		// printf("before pthread_join with philo %d\n", i + 1);
-		pthread_join(philo[i]->thread, NULL);
-		// printf("after pthread_join with philo %d\n", i + 1);
-		free(philo[i]);
+		pthread_join(philo[i].thread, NULL);
 		i--;
 	}
 	free(philo);
