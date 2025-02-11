@@ -1,6 +1,6 @@
-# Philosophers (work in process)
+# Philosophers
 
-This project is about learning the basics of threading in a process.
+Work in process. This project is about learning the basics of threading in a process.
 
 Started working on this with my MacOS on Saturday 25th of Jan.
 - Makefile
