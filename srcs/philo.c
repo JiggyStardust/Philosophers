@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:15:06 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/11 15:13:26 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 15:44:21 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	single_philo(t_philo *philo)
 
 void	*routine(void *arg)
 {
-	t_philo *philo;
-	int 	i;
+	t_philo	*philo;
+	int		i;
 
 	philo = (t_philo *)arg;
 	i = 0;
@@ -70,7 +70,8 @@ t_philo	*init_philos(t_data *data)
 			philo[i].left_fork = &data->forks[data->num_philos - 1];
 		else
 			philo[i].left_fork = &data->forks[i - 1];
-		if (pthread_create(&philo[i].thread, NULL, &routine, (void *)&philo[i]) != 0)
+		if (pthread_create(&philo[i].thread, NULL, &routine,
+				(void *)&philo[i]) != 0)
 		{
 			cleanup_philo(philo, i - 1);
 			return (NULL);

@@ -6,29 +6,23 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:13:58 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/11 14:52:34 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 15:42:46 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	argument_check(int ac)
+bool	arg_is_zero(char *s, int n)
 {
-	if (ac < 5 || ac > 6)
+	if (n == 0)
 	{
-	printf("Mandatory arguments (4 in total) are:\n");
-	printf("number_of_philosophers\n");
-	printf("time_to_die\n");
-	printf("time_to_eat\n");
-	printf("time_to_sleep\n");
-	printf("\nOptional:\n");
-	printf("number_of_times_each_philosopher_must_eat\n");
-	return (0);
+		printf("%s should be over 0\n", s);
+		return (true);
 	}
-	return (1);
+	return (false);
 }
 
-static int(valid_argument(char *str))
+static int	valid_argument(char *str)
 {
 	int	i;
 
@@ -38,14 +32,14 @@ static int(valid_argument(char *str))
 		printf("Argument values should be positive.\n");
 		return (0);
 	}
-	else if (str[0] == '+' &&(str[1] < '0'|| str[1] > '9'))
+	else if (str[0] == '+' && (str[1] < '0' || str[1] > '9'))
 	{
 		printf("Argument contained invalid characters.\n");
 		return (0);
 	}
 	while (str[i])
 	{
-		if (str[i] < '0'|| str[i] > '9')
+		if (str[i] < '0' || str[i] > '9')
 		{
 			printf("Argument contained invalid characters.\n");
 			return (0);
@@ -64,7 +58,7 @@ static int	ft_atoi_error(char *str, int *err)
 	i = 0;
 	result = 0;
 	check = result;
-	if ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32)) // can it contain whitespace?
+	if ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32))
 		i++;
 	if (!valid_argument(str + i))
 	{
@@ -80,17 +74,8 @@ static int	ft_atoi_error(char *str, int *err)
 	}
 	return ((int)result);
 }
-bool	arg_is_zero(char *s, int n)
-{
-	if (n == 0)
-	{
-		printf("%s should be over 0\n", s);
-		return (true);
-	}
-	return (false);
-}
 
-int		assign_data_nums(char **av, t_data *data)
+int	assign_data_nums(char **av, t_data *data)
 {
 	int	err;
 

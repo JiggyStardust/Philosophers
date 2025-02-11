@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:32:32 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/11 15:21:08 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 15:47:43 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static bool	first_fork_odd(t_philo *philo)
 	if (!philo_quit(philo))
 	{
 		pthread_mutex_lock(&philo->data->print);
-		printf("%d %d has taken a fork\n", get_time_ms() - philo->data->start_time, philo->id);
+		printf("%d %d has taken a fork\n", get_time_ms() \
+			- philo->data->start_time, philo->id);
 		pthread_mutex_unlock(&philo->data->print);
 	}
 	else
@@ -39,7 +40,8 @@ bool	take_first_fork(t_philo *philo)
 		if (!philo_quit(philo))
 		{
 			pthread_mutex_lock(&philo->data->print);
-			printf("%d %d has taken a fork\n", get_time_ms() - philo->data->start_time, philo->id);
+			printf("%d %d has taken a fork\n", get_time_ms() \
+				- philo->data->start_time, philo->id);
 			pthread_mutex_unlock(&philo->data->print);
 		}
 		else
@@ -50,13 +52,15 @@ bool	take_first_fork(t_philo *philo)
 		return (true);
 	}
 }
+
 static bool	second_fork_odd(t_philo *philo)
 {
 	pthread_mutex_lock(philo->right_fork);
 	if (!philo_quit(philo))
 	{
 		pthread_mutex_lock(&philo->data->print);
-		printf("%d %d has taken a fork\n", get_time_ms() - philo->data->start_time, philo->id);
+		printf("%d %d has taken a fork\n", get_time_ms() \
+			- philo->data->start_time, philo->id);
 		pthread_mutex_unlock(&philo->data->print);
 	}
 	else
@@ -78,7 +82,8 @@ bool	take_second_fork(t_philo *philo)
 		if (!philo_quit(philo))
 		{
 			pthread_mutex_lock(&philo->data->print);
-			printf("%d %d has taken a fork\n", get_time_ms() - philo->data->start_time, philo->id);
+			printf("%d %d has taken a fork\n", get_time_ms() \
+				- philo->data->start_time, philo->id);
 			pthread_mutex_unlock(&philo->data->print);
 		}
 		else

@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:11:24 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/11 15:11:36 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 15:48:44 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ bool	philo_dead(t_philo *philo, t_data *data)
 			{
 				if (!data->quit)
 				{
-					printf("%d %d died\n", get_time_ms() - data->start_time,
-					philo[i].id);
+					printf("%d %d died\n", get_time_ms() - data->start_time, \
+						philo[i].id);
 					data->quit = true;
 				}
 				pthread_mutex_unlock(&data->lock);
@@ -60,7 +60,6 @@ bool	philo_is_full(t_philo *philo, t_data *data)
 	bool	ret;
 
 	ret = false;
-
 	if (data->num_must_eat == -1)
 		return (ret);
 	pthread_mutex_lock(&data->lock);
