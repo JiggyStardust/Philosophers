@@ -31,6 +31,7 @@ SRCS			=	$(SRCDIR)/actions.c \
 					$(SRCDIR)/monitoring.c \
 					$(SRCDIR)/philo.c \
 					$(SRCDIR)/take_forks.c \
+					$(SRCDIR)/utils.c \
 
 OBJS			= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 

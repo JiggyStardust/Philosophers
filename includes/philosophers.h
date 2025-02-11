@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:28:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/11 15:12:48 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 15:40:41 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,14 @@ typedef struct s_philo
  * Checks if there's a valid amount of arguments, but doesn't check the 
  * validity of them (happens later)
 ******************************************************************************/
-int	argument_check(int ac);
+int				argument_check(int ac);
 
 /******************************************************************************
  * Assign all int values inside @param s_data struct. Arguments (char argv[i]) 
  * are checked and turned into ints using a static function ft_atoi_error().
  * @param start_time we get by calling get_time_ms() function.
  *****************************************************************************/
-int	assign_data_nums(char **av, t_data *data);
+int				assign_data_nums(char **av, t_data *data);
 
 /******************************************************************************
  * Initializes and returns an array of mutexes (= *forks). There are as many
@@ -71,42 +71,42 @@ pthread_mutex_t	*assign_forks(t_data *data);
  * Returns the current time in milliseconds by calling gettimeofday() and
  * converting the result into milliseconds.
 ******************************************************************************/
-int	get_time_ms(void);
+int				get_time_ms(void);
 
 /******************************************************************************
  * Destroys fork mutexes by calling free_destroy_forks() and ultimately frees 
  * t_data struct.
 ******************************************************************************/
-void	free_data(t_data *data);
+void			free_data(t_data *data);
 
 /******************************************************************************
  * Destroys the threads by calling pthread_join() and frees the t_philo struct.
 ******************************************************************************/
-void	cleanup_philo(t_philo *philo, int i);
+void			cleanup_philo(t_philo *philo, int i);
 
 /******************************************************************************
  * Destroys fork mutexes by calling pthread_mutex_destroy() frees *forks array.
 ******************************************************************************/
-void	free_destroy_forks(pthread_mutex_t *forks, int i);
+void			free_destroy_forks(pthread_mutex_t *forks, int i);
 
 /******************************************************************************
  * Allocates memory for t_data struct and assigns it's values by calling
  * assign_data_nums() and assign_forks().
 ******************************************************************************/
-t_data	*init_data(char **av);
+t_data			*init_data(char **av);
 
-bool	take_second_fork(t_philo *philo);
-bool	take_first_fork(t_philo *philo);
+bool			take_second_fork(t_philo *philo);
+bool			take_first_fork(t_philo *philo);
 
-void	monitoring(t_philo *philo, t_data *data);
-bool	philos_are_full(t_philo *philo, t_data *data);
-bool	philo_is_full(t_philo *philo, t_data *data);
-bool	philo_dead(t_philo *philo, t_data *data);
-bool	philo_starved(t_philo *philo);
+void			monitoring(t_philo *philo, t_data *data);
+bool			philos_are_full(t_philo *philo, t_data *data);
+bool			philo_is_full(t_philo *philo, t_data *data);
+bool			philo_dead(t_philo *philo, t_data *data);
+bool			philo_starved(t_philo *philo);
 
-bool	philo_quit(t_philo *philo); // not sure if keeping it
-int		eating(t_philo *philo);
-void	thinking(t_philo *philo);
-void	sleeping(t_philo *philo);
+bool			philo_quit(t_philo *philo); // not sure if keeping it
+int				eating(t_philo *philo);
+void			thinking(t_philo *philo);
+void			sleeping(t_philo *philo);
 
 #endif
