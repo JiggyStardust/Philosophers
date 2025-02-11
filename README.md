@@ -132,17 +132,20 @@ There were also some bigger logical issues with my program. I previously had the
 - Starting to split some bigger functions into smaller ones and also putting sleep functions into ft_sleeps that sleeps in bits and
 checks whether we should end running the simulation.
 - Thinking of making a custom print function aswell.
-
 ----------------------------------------------------------------
 					TO DO
 ----------------------------------------------------------------
 
- [❌] Argument value check for 0 - not running the program when set for time of death, philos, or num_must_eat
+ [✔️] Argument value check for 0 - not running the program when set for time of death, philos, or num_must_eat
  
  [❌] ft_sleep
  
- [❌] split bigger functions
+ [✔️] split bigger functions
  
  [✔️] data races
  
- [❌] **philo -> *philo (no point in having a double array anymore)
+ [✔️] **philo -> *philo (no point in having a double array anymore)
+
+- It's Norminetted, but header file needs the rest of the definitions/explanations for functions.
+- Doesnt leak or leave data races
+- 95% done, will probably evaluate tomorrow?
