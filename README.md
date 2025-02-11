@@ -131,4 +131,14 @@ There were also some bigger logical issues with my program. I previously had the
 - Implemented the logic for checking philos' fullness and ending simulation when complete fullness is achieved.
 - Starting to split some bigger functions into smaller ones and also putting sleep functions into ft_sleeps that sleeps in bits and
 checks whether we should end running the simulation.
-- Thinking of making a custon print function aswell.
+- Thinking of making a custom print function aswell.
+
+----------------------------------------------------------------
+					TO DO
+----------------------------------------------------------------
+
+ [❌] Argument value check for 0 - not running the program when set for time of death, philos, or num_must_eat
+ [❌] ft_sleep
+ [❌] split bigger functions
+ [✔️] data races
+ [❌] **philo -> *philo (no point in having a double array anymore)

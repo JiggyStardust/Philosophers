@@ -29,6 +29,7 @@ SRCS			=	$(SRCDIR)/actions.c \
 					$(SRCDIR)/free_and_destroy.c \
 					$(SRCDIR)/init_data.c \
 					$(SRCDIR)/philo.c \
+					$(SRCDIR)/take_forks.c \
 
 OBJS			= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 

@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:15:06 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/11 10:31:11 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:34:11 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,6 @@ bool	philo_dead(t_philo **philo, t_data *data)
 		if (philo_starved(philo[i]))
 		{
 			pthread_mutex_lock(&data->lock);
-			data->philo_died = true;
-			pthread_mutex_unlock(&data->lock);
 			if (!data->quit && pthread_mutex_lock(&data->print) == 0)
 			{
 				if (!data->quit)
@@ -97,6 +95,7 @@ bool	philo_dead(t_philo **philo, t_data *data)
 					philo[i]->id);
 					data->quit = true;
 				}
+				pthread_mutex_unlock(&data->lock);
 				pthread_mutex_unlock(&data->print);
 			}
 			return (true);
@@ -111,7 +110,8 @@ bool	philo_is_full(t_philo *philo, t_data *data)
 	bool	ret;
 
 	ret = false;
-	if (data->num_must_eat == 0)
+
+	if (data->num_must_eat == -1)
 		return (ret);
 	pthread_mutex_lock(&data->lock);
 	if (philo->meals_eaten >= data->num_must_eat)
