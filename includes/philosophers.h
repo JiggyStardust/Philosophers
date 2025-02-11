@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:28:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/10 16:06:19 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:33:48 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,11 @@ void	free_destroy_forks(pthread_mutex_t *forks, int i);
 ******************************************************************************/
 t_data	*init_data(char **av);
 
-bool	philo_died(t_philo *philo); // not sure if keeping it
+bool	take_second_fork(t_philo *philo);
+bool	take_first_fork(t_philo *philo);
+
+
+bool	philo_quit(t_philo *philo); // not sure if keeping it
 int		eating(t_philo *philo);
 void	thinking(t_philo *philo);
 void	sleeping(t_philo *philo);

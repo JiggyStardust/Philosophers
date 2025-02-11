@@ -118,8 +118,17 @@ Which checks for possible data races and reports them as errors.
 Managed to get from over 30 errors to 0 errors when running with
 100 philos. To achieve this:
 - I added one more mutex called "lock".
-- I use this lock when ever I'm reading or writing into a struct that's also possibly inspected by other threads.
+- I use this lock whenever I'm reading or writing into a struct that's also possibly inspected by other threads.
 
 - In addition to this I needed to exted the usage of printf being protected by the same pthread_mutex_t print that is guarding the "xx philo x died" printing.
 
-There were also some bigger logical issues with my program. I preveiously had the monitoring inside the thread's routine loop, but now it's in the main, and it's tracking philos death. I need to still add the meals_eaten into the conditions, so the simumlation/routine stops if all the philos are full.
+There were also some bigger logical issues with my program. I previously had the monitoring inside the thread's routine loop, but now it's in the main and it's tracking philos' deaths. I need to still add the meals_eaten into the conditions, so the simumlation/routine stops if all the philos are full.
+
+----------------------------------------------------------------
+11th of February
+----------------------------------------------------------------
+
+- Implemented the logic for checking philos' fullness and ending simulation when complete fullness is achieved.
+- Starting to split some bigger functions into smaller ones and also putting sleep functions into ft_sleeps that sleeps in bits and
+checks whether we should end running the simulation.
+- Thinking of making a custon print function aswell.

@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 11:11:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/10 17:17:59 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:33:14 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	thinking(t_philo *philo)
 {
-	if (philo_died(philo))
+	if (philo_quit(philo))
 		return ;
 	if (!philo->is_thinking)
 	{
@@ -25,10 +25,10 @@ void	thinking(t_philo *philo)
 	}
 }
 
-bool	philo_died(t_philo *philo)
+bool	philo_quit(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->lock);
-	if (philo->data->philo_died)
+	if (philo->data->quit)
 	{
 		pthread_mutex_unlock(&philo->data->lock);
 		return (true);
@@ -39,74 +39,6 @@ bool	philo_died(t_philo *philo)
 	return (false);
 }
 
-bool	take_first_fork(t_philo *philo)
-{
-	if (philo->id % 2 == 1)
-	{
-		pthread_mutex_lock(philo->left_fork);
-		if (!philo_died(philo))
-		{
-			pthread_mutex_lock(&philo->data->print);
-			printf("%d %d has taken a fork\n", get_time_ms() - philo->data->start_time, philo->id);
-			pthread_mutex_unlock(&philo->data->print);
-		}
-		else
-		{
-			pthread_mutex_unlock(philo->left_fork);
-			return (false);
-		}
-		return (true);
-	}
-	pthread_mutex_lock(philo->right_fork);
-	if (!philo_died(philo))
-	{
-		pthread_mutex_lock(&philo->data->print);
-		printf("%d %d has taken a fork\n", get_time_ms() - philo->data->start_time, philo->id);
-		pthread_mutex_unlock(&philo->data->print);
-	}
-	else
-	{
-		pthread_mutex_unlock(philo->right_fork);
-		return (false);
-	}
-	return (true);
-}
-
-bool	take_second_fork(t_philo *philo)
-{
-	if (philo->id % 2 == 1)
-	{
-		pthread_mutex_lock(philo->right_fork);
-		if (!philo_died(philo))
-		{
-			pthread_mutex_lock(&philo->data->print);
-			printf("%d %d has taken a fork\n", get_time_ms() - philo->data->start_time, philo->id);
-			pthread_mutex_unlock(&philo->data->print);
-		}
-		else
-		{
-			pthread_mutex_unlock(philo->left_fork);
-			pthread_mutex_unlock(philo->right_fork);
-			return (false);
-		}
-		return (true);
-	}
-	pthread_mutex_lock(philo->left_fork);
-	if (!philo_died(philo))
-	{
-		pthread_mutex_lock(&philo->data->print);
-		printf("%d %d has taken a fork\n", get_time_ms() - philo->data->start_time, philo->id);
-		pthread_mutex_unlock(&philo->data->print);
-	}
-	else
-	{
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-		return (false);
-	}
-	return (true);
-}
-
 int	philo_ate(t_philo *philo)
 {
 	int	time;
@@ -115,7 +47,7 @@ int	philo_ate(t_philo *philo)
 	while (get_time_ms() < time + philo->data->time_eats)
 	{
 		usleep(1);
-		if (philo_died(philo))
+		if (philo_quit(philo))
 		{
 			pthread_mutex_unlock(philo->left_fork);
 			pthread_mutex_unlock(philo->right_fork);
@@ -127,7 +59,7 @@ int	philo_ate(t_philo *philo)
 
 int	eating(t_philo *philo)
 {
-	if (philo_died(philo))
+	if (philo_quit(philo))
 		return (0);
 	if (!take_first_fork(philo))
 		return (0);
@@ -141,8 +73,8 @@ int	eating(t_philo *philo)
 	pthread_mutex_unlock(&philo->data->print);
 	if (!philo_ate(philo))
 		return (0);
-	philo->meals_eaten++;
 	pthread_mutex_lock(&philo->data->lock);
+	philo->meals_eaten++;
 	philo->last_meal_time = get_time_ms();
 	pthread_mutex_unlock(&philo->data->lock);
 	pthread_mutex_unlock(philo->left_fork);
@@ -152,11 +84,19 @@ int	eating(t_philo *philo)
 
 void	sleeping(t_philo *philo)
 {
-	if (philo_died(philo))
+	int	time;
+
+	time = get_time_ms();
+	if (philo_quit(philo))
 		return ;
 	pthread_mutex_lock(&philo->data->print);
 	printf("%d %d is sleeping.\n", get_time_ms() - philo->data->start_time, philo->id);
-	pthread_mutex_lock(&philo->data->print);
-	usleep(philo->data->time_sleeps * 1000);
+	pthread_mutex_unlock(&philo->data->print);
+	while (get_time_ms() < time + philo->data->time_sleeps)
+	{
+		if (philo_quit(philo))
+			return ;
+		usleep(1);
+	}
 	philo->is_thinking = false;
 }

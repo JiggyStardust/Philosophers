@@ -6,32 +6,11 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:15:06 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/10 17:15:34 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:31:11 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-// int		monitoring(t_philo *philo, t_data *data)
-// {
-// 	if (philo->data->quit)
-// 		return (0);
-// 	if (philo->data->philo_died)
-// 	{
-// 		if (!philo->data->quit && pthread_mutex_lock(&philo->data->print) == 0)
-// 		{
-// 			if (!philo->data->quit)
-// 			{
-// 				printf("%d %d died\n",get_time_ms() - philo->data->start_time,
-// 				philo->id);
-// 				philo->data->quit = true;
-// 			}
-// 			pthread_mutex_unlock(&philo->data->print);
-// 		}
-// 		return (0);
-// 	}
-// 	return (1);
-// }
 
 void	*routine(void *arg)
 {
@@ -45,7 +24,7 @@ void	*routine(void *arg)
 		thinking(philo);
 		if (eating(philo))
 			sleeping(philo);
-		if (philo_died(philo))
+		if (philo_quit(philo))
 			break ;
 	}
 	return (NULL);
@@ -127,14 +106,56 @@ bool	philo_dead(t_philo **philo, t_data *data)
 	return (false);
 }
 
+bool	philo_is_full(t_philo *philo, t_data *data)
+{
+	bool	ret;
+
+	ret = false;
+	if (data->num_must_eat == 0)
+		return (ret);
+	pthread_mutex_lock(&data->lock);
+	if (philo->meals_eaten >= data->num_must_eat)
+		ret = true;
+	pthread_mutex_unlock(&data->lock);
+	return (ret);
+}
+
+bool	philos_are_full(t_philo **philo, t_data *data)
+{
+	int	fullness;
+	int	i;
+
+	fullness = 0;
+	i = 0;
+	while (i < data->num_philos)
+	{
+		if (philo_is_full(philo[i], data))
+			fullness++;
+		if (fullness == data->num_philos)
+		{
+			pthread_mutex_lock(&data->lock);
+			data->quit = true;
+			pthread_mutex_unlock(&data->lock);
+			return (true);
+		}
+		i++;
+	}
+	return (false);
+}
+
 void	monitoring(t_philo **philo, t_data *data)
 {
 	while (1)
 	{
 		if (philo_dead(philo, data))
 			break ;
-		// (philos_full(philo))
-		// return ;
+		if (philos_are_full(philo, data))
+		{
+			pthread_mutex_lock(&data->print);
+			printf("Philosophers full, ending simulation\n");
+			pthread_mutex_unlock(&data->print);
+			break ;
+		}
 	}
 }
 
