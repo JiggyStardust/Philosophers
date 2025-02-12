@@ -49,7 +49,7 @@ $(NAME): $(OBJS)
 
 clean:
 	@$(CLEANING)
-	@rm -rf $(OBJS)
+	@rm -rf $(OBJS) $(OBJDIR)
 
 fclean: clean
 	@$(FCLEANING)
