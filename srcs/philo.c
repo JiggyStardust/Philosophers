@@ -6,40 +6,45 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:15:06 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/11 15:44:21 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:31:07 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	single_philo(t_philo *philo)
+static char	*single_philo(t_philo *philo)
 {
 	thinking(philo);
 	if (!take_first_fork(philo))
-		return ;
+		return (NULL);
 	usleep(philo->data->time_dies * 1000);
 	pthread_mutex_unlock(philo->left_fork);
+	return (NULL);
 }
 
 void	*routine(void *arg)
 {
 	t_philo	*philo;
-	int		i;
+	int		delay;
 
 	philo = (t_philo *)arg;
-	i = 0;
+	delay = 0;
 	if (philo->data->num_philos == 1)
-	{
-		single_philo(philo);
-		return (NULL);
-	}
+		return (single_philo(philo));
+	if (philo->id % 2 == 0)
+		delay = 50000;
+	if (philo->data->num_philos % 2 == 1)
+		delay += philo->data->time_eats * 1000 \
+			* philo->id / philo->data->num_philos;
+	thinking(philo);
+	usleep(delay);
 	while (true)
 	{
-		thinking(philo);
 		if (eating(philo))
 			sleeping(philo);
 		if (philo_quit(philo))
 			break ;
+		thinking(philo);
 	}
 	return (NULL);
 }

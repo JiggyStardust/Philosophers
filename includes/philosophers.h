@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:28:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/11 15:40:41 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:04:33 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <pthread.h> // creating threads
 # include <sys/time.h> // gettimeofday()
 # include <unistd.h> // usleep()
+# include <limits.h>  // INT_MAX
 # include <stdio.h> // printf()
 # include <string.h> // memset
 # include <stdlib.h> // malloc
@@ -95,18 +96,45 @@ void			free_destroy_forks(pthread_mutex_t *forks, int i);
 ******************************************************************************/
 t_data			*init_data(char **av);
 
+/******************************************************************************
+ * Makes philo pthread_mutex_lock the left_fork for odd numbered philos, and 
+ * the right_fork for even numbered philos.
+******************************************************************************/
 bool			take_second_fork(t_philo *philo);
+
+/******************************************************************************
+ * Makes philo pthread_mutex_lock the right_fork for odd numbered philos, and 
+ * the left_fork for even numbered philos.
+******************************************************************************/
 bool			take_first_fork(t_philo *philo);
 
+/******************************************************************************
+ * Monitors if the philos are starved (get_time_ms() - last_meal exceeds 
+ * the time_dies), or if all the philos have eaten enough -> quits the simula-
+ * tion without a message.
+******************************************************************************/
 void			monitoring(t_philo *philo, t_data *data);
-bool			philos_are_full(t_philo *philo, t_data *data);
-bool			philo_is_full(t_philo *philo, t_data *data);
-bool			philo_dead(t_philo *philo, t_data *data);
-bool			philo_starved(t_philo *philo);
 
-bool			philo_quit(t_philo *philo); // not sure if keeping it
-int				eating(t_philo *philo);
-void			thinking(t_philo *philo);
+/******************************************************************************
+ * Check whether the main thread has detected a death of a philo, or is every 
+ * philo is full. Returns true if philo-data->quit == true, false if not.
+******************************************************************************/
+bool			philo_quit(t_philo *philo);
+
+/******************************************************************************
+ * The eating process of a philo, calls take_first_fork, take_second_fork and 
+ * starts to eat.
+******************************************************************************/
+bool			eating(t_philo *philo);
+
+/******************************************************************************
+ * The sleeping process, which happens after eating.
+******************************************************************************/
 void			sleeping(t_philo *philo);
+
+/******************************************************************************
+ * The thinking process, which is occuring whenever philo doesn't eat or sleep.
+******************************************************************************/
+void			thinking(t_philo *philo);
 
 #endif

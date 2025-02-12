@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:13:58 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/11 15:42:46 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:04:42 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,27 +24,28 @@ bool	arg_is_zero(char *s, int n)
 
 static int	valid_argument(char *str)
 {
-	int	i;
-
-	i = 1;
-	if (str[0] == '-')
+	if (*str == '-')
 	{
 		printf("Argument values should be positive.\n");
 		return (0);
 	}
-	else if (str[0] == '+' && (str[1] < '0' || str[1] > '9'))
+	else if (*str == '+')
 	{
-		printf("Argument contained invalid characters.\n");
-		return (0);
-	}
-	while (str[i])
-	{
-		if (str[i] < '0' || str[i] > '9')
+		if (*(str + 1) < '0' || *(str + 1) > '9')
 		{
 			printf("Argument contained invalid characters.\n");
 			return (0);
 		}
-		i++;
+		str++;
+	}
+	while (*str)
+	{
+		if (*str < '0' || *str > '9')
+		{
+			printf("Argument contained invalid characters.\n");
+			return (0);
+		}
+		str++;
 	}
 	return (1);
 }
@@ -52,13 +53,11 @@ static int	valid_argument(char *str)
 static int	ft_atoi_error(char *str, int *err)
 {
 	int		i;
-	long	result;
-	long	check;
+	long	nbr;
 
 	i = 0;
-	result = 0;
-	check = result;
-	if ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32))
+	nbr = 0;
+	while ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32))
 		i++;
 	if (!valid_argument(str + i))
 	{
@@ -67,12 +66,16 @@ static int	ft_atoi_error(char *str, int *err)
 	}
 	while (str[i] && str[i] >= '0' && str[i] <= '9')
 	{
-		result = (result * 10) + (str[i] - '0');
+		nbr = nbr * 10 + (str[i] - '0');
 		i++;
-		if (check > result)
-			return (-1);
+		if (nbr < 0 || nbr > INT_MAX)
+		{
+			printf("Arguments have to fit in an unsigned int\n");
+			*err = 1;
+			return (0);
+		}
 	}
-	return ((int)result);
+	return ((int)nbr);
 }
 
 int	assign_data_nums(char **av, t_data *data)
