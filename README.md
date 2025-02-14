@@ -149,3 +149,11 @@ checks whether we should end running the simulation.
 - It's Norminetted, but header file needs the rest of the definitions/explanations for functions.
 - Doesnt leak or leave data races
 - 95% done, will probably evaluate tomorrow?
+
+----------------------------------------------------------------
+12th of February
+----------------------------------------------------------------
+- Tested some edge cases and had to modify the routine so philos avoid dying better -> 
+routines have a sleep in the beginning so they don't block some philos when number of philos is an odd number. with case 5 800 200 200 7 there should be minimum 35 prints but my philos died before they had enough to eat. Now it's fixed
+
+- Still no addition ft_sleep added, might evaluate though.
