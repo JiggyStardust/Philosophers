@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:28:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/12 18:04:33 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/14 11:00:08 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ typedef struct s_philo
 {
 	int				id;
 	int				meals_eaten;
-	bool			is_thinking;
 	long long		last_meal_time;
 	pthread_t		thread;
 	struct s_data	*data;
@@ -69,10 +68,9 @@ int				assign_data_nums(char **av, t_data *data);
 pthread_mutex_t	*assign_forks(t_data *data);
 
 /******************************************************************************
- * Returns the current time in milliseconds by calling gettimeofday() and
- * converting the result into milliseconds.
+ * Destroys the threads by calling pthread_join() and frees the t_philo struct.
 ******************************************************************************/
-int				get_time_ms(void);
+void			cleanup_philo(t_philo *philo, int i);
 
 /******************************************************************************
  * Destroys fork mutexes by calling free_destroy_forks() and ultimately frees 
@@ -81,32 +79,27 @@ int				get_time_ms(void);
 void			free_data(t_data *data);
 
 /******************************************************************************
- * Destroys the threads by calling pthread_join() and frees the t_philo struct.
-******************************************************************************/
-void			cleanup_philo(t_philo *philo, int i);
-
-/******************************************************************************
  * Destroys fork mutexes by calling pthread_mutex_destroy() frees *forks array.
 ******************************************************************************/
 void			free_destroy_forks(pthread_mutex_t *forks, int i);
+
+/******************************************************************************
+ * Helper function to perform usleep() for readability and checking whether the
+ * program should quit running whilst eating or sleeping.
+******************************************************************************/
+bool			ft_sleep(t_philo *philo, int time);
+
+/******************************************************************************
+ * Returns the current time in milliseconds by calling gettimeofday() and
+ * converting the result into milliseconds.
+******************************************************************************/
+int				get_time_ms(void);
 
 /******************************************************************************
  * Allocates memory for t_data struct and assigns it's values by calling
  * assign_data_nums() and assign_forks().
 ******************************************************************************/
 t_data			*init_data(char **av);
-
-/******************************************************************************
- * Makes philo pthread_mutex_lock the left_fork for odd numbered philos, and 
- * the right_fork for even numbered philos.
-******************************************************************************/
-bool			take_second_fork(t_philo *philo);
-
-/******************************************************************************
- * Makes philo pthread_mutex_lock the right_fork for odd numbered philos, and 
- * the left_fork for even numbered philos.
-******************************************************************************/
-bool			take_first_fork(t_philo *philo);
 
 /******************************************************************************
  * Monitors if the philos are starved (get_time_ms() - last_meal exceeds 
@@ -122,15 +115,28 @@ void			monitoring(t_philo *philo, t_data *data);
 bool			philo_quit(t_philo *philo);
 
 /******************************************************************************
+ * Makes philo pthread_mutex_lock the left_fork for odd numbered philos, and 
+ * the right_fork for even numbered philos.
+******************************************************************************/
+bool			take_second_fork(t_philo *philo);
+
+/******************************************************************************
+ * Makes philo pthread_mutex_lock the right_fork for odd numbered philos, and 
+ * the left_fork for even numbered philos.
+******************************************************************************/
+bool			take_first_fork(t_philo *philo);
+
+/******************************************************************************
  * The eating process of a philo, calls take_first_fork, take_second_fork and 
  * starts to eat.
 ******************************************************************************/
 bool			eating(t_philo *philo);
 
 /******************************************************************************
- * The sleeping process, which happens after eating.
+ * The sleeping process, which happens after eating. Returns true if succeeded
+ * to sleep the required.
 ******************************************************************************/
-void			sleeping(t_philo *philo);
+bool			sleeping(t_philo *philo);
 
 /******************************************************************************
  * The thinking process, which is occuring whenever philo doesn't eat or sleep.

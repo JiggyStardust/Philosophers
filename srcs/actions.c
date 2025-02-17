@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 11:11:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/12 18:12:19 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/14 10:43:51 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,28 +35,22 @@ void	thinking(t_philo *philo)
 	pthread_mutex_unlock(&philo->data->print);
 }
 
-int	philo_ate(t_philo *philo)
+static bool	philo_ate(t_philo *philo)
 {
-	int	time;
+	bool	ate;
 
-	time = get_time_ms();
-	if (philo_quit(philo))
+	ate = true;
+	if (!ft_sleep(philo, philo->data->time_eats))
+		ate = false;
+	else
 	{
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-		return (0);
+		pthread_mutex_lock(&philo->data->lock);
+		philo->meals_eaten++;
+		pthread_mutex_unlock(&philo->data->lock);
 	}
-	while (get_time_ms() < time + philo->data->time_eats)
-	{
-		usleep(10);
-		if (philo_quit(philo))
-		{
-			pthread_mutex_unlock(philo->left_fork);
-			pthread_mutex_unlock(philo->right_fork);
-			return (0);
-		}
-	}
-	return (1);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
+	return (ate);
 }
 
 bool	eating(t_philo *philo)
@@ -77,30 +71,17 @@ bool	eating(t_philo *philo)
 	pthread_mutex_unlock(&philo->data->print);
 	if (!philo_ate(philo))
 		return (false);
-	pthread_mutex_lock(&philo->data->lock);
-	philo->meals_eaten++;
-	pthread_mutex_unlock(&philo->data->lock);
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
 	return (true);
 }
 
-void	sleeping(t_philo *philo)
+bool	sleeping(t_philo *philo)
 {
-	int	time;
-
-	time = get_time_ms();
-	if (philo_quit(philo))
-		return ;
 	pthread_mutex_lock(&philo->data->print);
 	if (!philo_quit(philo))
 		printf("%d %d is sleeping\n", get_time_ms() \
 			- philo->data->start_time, philo->id);
 	pthread_mutex_unlock(&philo->data->print);
-	while (get_time_ms() < time + philo->data->time_sleeps)
-	{
-		if (philo_quit(philo))
-			return ;
-		usleep(10);
-	}
+	if (!ft_sleep(philo, philo->data->time_sleeps))
+		return (false);
+	return (true);
 }
