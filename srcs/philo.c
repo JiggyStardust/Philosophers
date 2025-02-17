@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:15:06 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/17 08:56:00 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/17 11:25:33 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,13 @@ void	*routine(void *arg)
 	if (philo->data->num_philos == 1)
 		return (single_philo(philo));
 	if (philo->id % 2 == 0)
-		delay = philo->data->time_eats * 2;
+		delay = 10;
 	if (philo->data->num_philos % 2 == 1)
-		delay += philo->data->time_eats * 1000 \
+		delay += 10 \
 			* philo->id / philo->data->num_philos;
 	thinking(philo);
-	usleep(delay);
+	ft_sleep(philo, delay);
+	// usleep(delay);
 	while (true)
 	{
 		if (eating(philo))
@@ -49,17 +50,12 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-static void	assign_philo_nums_and_forks(t_philo *philo, t_data *data, int i)
+static void	assign_philo_nums(t_philo *philo, t_data *data, int i)
 {
 	philo->id = i + 1;
 	philo->last_meal_time = get_time_ms();
 	philo->meals_eaten = 0;
 	philo->data = data;
-	philo->right_fork = &data->forks[i];
-	if (i == 0)
-		philo->left_fork = &data->forks[data->num_philos - 1];
-	else
-		philo->left_fork = &data->forks[i - 1];
 }
 
 t_philo	*init_philos(t_data *data)
@@ -73,12 +69,12 @@ t_philo	*init_philos(t_data *data)
 		return (NULL);
 	while (i < data->num_philos)
 	{
-		assign_philo_nums_and_forks(&philo[i], data, i);
-		// philo[i].right_fork = &data->forks[i];
-		// if (i == 0)
-		// 	philo[i].left_fork = &data->forks[data->num_philos - 1];
-		// else
-		// 	philo[i].left_fork = &data->forks[i - 1];
+		assign_philo_nums(&philo[i], data, i);
+		philo[i].right_fork = &data->forks[i];
+		if (i == 0)
+			philo[i].left_fork = &data->forks[data->num_philos - 1];
+		else
+			philo[i].left_fork = &data->forks[i - 1];
 		if (pthread_create(&philo[i].thread, NULL, &routine,
 				(void *)&philo[i]) != 0)
 		{

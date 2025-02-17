@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:28:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/14 11:00:08 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/17 09:29:21 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_data
 	int				start_time;
 	bool			philo_died;
 	bool			quit;
+	bool			start;
 	pthread_mutex_t	print;
 	pthread_mutex_t	lock;
 	pthread_mutex_t	*forks;
