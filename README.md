@@ -138,7 +138,7 @@ checks whether we should end running the simulation.
 
  [✔️] Argument value check for 0 - not running the program when set for time of death, philos, or num_must_eat
  
- [❌] ft_sleep
+ [❌] ft_sleep()
  
  [✔️] split bigger functions
  
@@ -164,6 +164,9 @@ routines have a sleep in the beginning so they don't block some philos when numb
 - Started working in Vogsphere repo and tried to evaluate on Fri 14th. In this I had a problem with delay, if the eating time was very long.
 Issue: 4 410 200000 200 printed the xx x died on time and nothing was printed after, but program quit running only after all the threads had passed their beginning delay.
 I now change the delay logic a bit.
+ [✔️] ft_sleep()
 
-- In the upcoming version there's also ft_sleep() implemented. 
+- Philos still die with args 200 410 200 200, 100 410 200 200 live.
+- Tried syncing, but mutex_locking causes even further delay for some reason.
+
 
