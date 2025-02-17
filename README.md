@@ -157,3 +157,13 @@ checks whether we should end running the simulation.
 routines have a sleep in the beginning so they don't block some philos when number of philos is an odd number. with case 5 800 200 200 7 there should be minimum 35 prints but my philos died before they had enough to eat. Now it's fixed
 
 - Still no addition ft_sleep added, might evaluate though.
+
+----------------------------------------------------------------
+17th of February
+----------------------------------------------------------------
+- Started working in Vogsphere repo and tried to evaluate on Fri 14th. In this I had a problem with delay, if the eating time was very long.
+Issue: 4 410 200000 200 printed the xx x died on time and nothing was printed after, but program quit running only after all the threads had passed their beginning delay.
+I now change the delay logic a bit.
+
+- In the upcoming version there's also ft_sleep() implemented. 
+
