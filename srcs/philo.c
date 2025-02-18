@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:15:06 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/17 14:08:56 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/18 09:30:17 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,17 @@ void	*routine(void *arg)
 {
 	t_philo	*philo;
 	int		delay;
+	struct timeval time;
 
 	philo = (t_philo *)arg;
-	delay = 0;
+	gettimeofday(&time, NULL);
 	if (philo->data->num_philos == 1)
 		return (single_philo(philo));
+	delay = 0;
 	if (philo->id % 2 == 0)
-		delay = 40;
-	// if (philo->id == philo->data->num_philos)
-	// 	delay += 10;
-	if (philo->data->num_philos % 2 == 1)
-		delay += philo->data->time_eats \
-			* philo->id / philo->data->num_philos;
+		delay = time.tv_usec % 3000 + 1000;
 	thinking(philo);
-	ft_sleep(philo, delay);
+	usleep(delay);
 	while (true)
 	{
 		if (eating(philo))
@@ -47,6 +44,8 @@ void	*routine(void *arg)
 				thinking(philo);
 		if (philo_quit(philo))
 			return (NULL);
+		gettimeofday(&time, NULL);
+		usleep(time.tv_usec % 3000 + 1000);
 	}
 	return (NULL);
 }
@@ -73,6 +72,7 @@ t_philo	*init_philos(t_data *data)
 	philo = malloc(sizeof(t_philo) * data->num_philos);
 	if (!philo)
 		return (NULL);
+	data->start_time = get_time_ms();
 	while (i < data->num_philos)
 	{
 		assign_philo_nums_and_forks(&philo[i], data, i);
