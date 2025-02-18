@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:15:06 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/18 09:30:17 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/18 09:32:10 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ static char	*single_philo(t_philo *philo)
 
 void	*routine(void *arg)
 {
-	t_philo	*philo;
-	int		delay;
-	struct timeval time;
+	t_philo			*philo;
+	int				delay;
+	struct timeval	time;
 
 	philo = (t_philo *)arg;
 	gettimeofday(&time, NULL);

@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:11:24 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/18 09:28:44 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:04:34 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,6 @@ void	monitoring(t_philo *philo, t_data *data)
 			break ;
 		if (philos_are_full(philo, data))
 			break ;
-		usleep(500);
+		usleep(400);
 	}
 }
