@@ -169,4 +169,20 @@ I now change the delay logic a bit.
 - Philos still die with args 200 410 200 200, 100 410 200 200 live.
 - Tried syncing, but mutex_locking causes even further delay for some reason.
 
+----------------------------------------------------------------
+19th of February
+----------------------------------------------------------------
+- In this version my philos don't die when terms are 200 410 200 200.
+- It even runs in the terminal now (previously I had to redirect to an outfile).
+- The most drastic change and progress happened by changing the usleep value in ft_sleep from 10->250.
+Now the mutex_lock isn't prevailed by ft_sleep and others have access to it.
+- I also sync the philos so they start running their routine as simultaneously as possible. I do this by locking and immediately unlockin a mutex that's
+unlocked by main after all the philos have been created.
+
+There's a new usleep logic in the beginning:
+
+```
+	gettimeofday(&time, NULL);
+	...
+	usleep(time.tv_usec % 3000 + 1000); ```
 
