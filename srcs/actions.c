@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 11:11:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/19 12:23:46 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/19 12:59:07 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ static bool	philo_ate(t_philo *philo)
 
 bool	eating(t_philo *philo)
 {
-	// if (philo_quit(philo))
-	// 	return (false);
 	if (!take_first_fork(philo))
 		return (false);
 	if (!take_second_fork(philo))

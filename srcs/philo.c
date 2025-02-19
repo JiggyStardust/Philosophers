@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:15:06 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/19 12:13:30 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/19 12:54:15 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ void	*routine(void *arg)
 		if (!sleeping(philo))
 			break ;
 		thinking(philo);
-		// if (philo->id % 2 == 0)
-		// usleep(time.tv_usec % 3000 + 1000);
+		usleep(time.tv_usec % 3000 + 1000);
 	}
 	return (NULL);
 }
