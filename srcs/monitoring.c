@@ -107,6 +107,6 @@ void	monitoring(t_philo *philo, t_data *data)
 			break ;
 		if (philos_are_full(philo, data))
 			break ;
-		usleep(500);
+		usleep(400);
 	}
 }
