@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 11:11:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/19 10:43:10 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/19 12:23:46 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,26 @@ static bool	philo_ate(t_philo *philo)
 
 	ate = true;
 	if (!ft_sleep(philo, philo->data->time_eats))
+	{
 		ate = false;
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
+	}
 	else
 	{
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_lock(&philo->data->lock);
 		philo->meals_eaten++;
 		pthread_mutex_unlock(&philo->data->lock);
 	}
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
 	return (ate);
 }
 
 bool	eating(t_philo *philo)
 {
-	if (philo_quit(philo))
-		return (false);
+	// if (philo_quit(philo))
+	// 	return (false);
 	if (!take_first_fork(philo))
 		return (false);
 	if (!take_second_fork(philo))

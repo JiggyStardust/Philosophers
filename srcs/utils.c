@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:36:25 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/14 11:36:32 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/19 12:38:40 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ bool	ft_sleep(t_philo *philo, int time)
 	{
 		if (philo_quit(philo))
 			return (false);
-		usleep(10);
+		usleep(250);
 	}
 	return (true);
 }

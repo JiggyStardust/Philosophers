@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:11:24 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/19 10:14:22 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/19 10:53:55 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,16 @@
 static bool	philo_starved(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->lock);
+	if (philo->last_meal_time == 0)
+	{
+		if (get_time_ms() - philo->data->start_time >= philo->data->time_dies)
+		{
+			pthread_mutex_unlock(&philo->data->lock);
+			return (true);
+		}
+		pthread_mutex_unlock(&philo->data->lock);
+		return (false);
+	}
 	if (get_time_ms() - philo->last_meal_time >= philo->data->time_dies)
 	{
 		pthread_mutex_unlock(&philo->data->lock);
@@ -36,7 +46,6 @@ static bool	philo_dead(t_philo *philo, t_data *data)
 	{
 		if (philo_starved(&philo[i]))
 		{
-			// pthread_mutex_lock(&data->print);
 			pthread_mutex_lock(&data->lock);
 			if (!data->quit)
 			{
@@ -45,7 +54,6 @@ static bool	philo_dead(t_philo *philo, t_data *data)
 					philo[i].id);
 			}
 			pthread_mutex_unlock(&data->lock);
-			// pthread_mutex_unlock(&data->print);
 			return (true);
 		}
 		i++;
@@ -92,6 +100,7 @@ static bool	philos_are_full(t_philo *philo, t_data *data)
 
 void	monitoring(t_philo *philo, t_data *data)
 {
+	data->start_time = get_time_ms();
 	while (1)
 	{
 		if (philo_dead(philo, data))
