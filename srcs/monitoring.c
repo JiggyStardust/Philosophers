@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:11:24 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/18 09:28:44 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/19 10:14:22 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static bool	philo_dead(t_philo *philo, t_data *data)
 	{
 		if (philo_starved(&philo[i]))
 		{
-			pthread_mutex_lock(&data->print);
+			// pthread_mutex_lock(&data->print);
 			pthread_mutex_lock(&data->lock);
 			if (!data->quit)
 			{
@@ -45,7 +45,7 @@ static bool	philo_dead(t_philo *philo, t_data *data)
 					philo[i].id);
 			}
 			pthread_mutex_unlock(&data->lock);
-			pthread_mutex_unlock(&data->print);
+			// pthread_mutex_unlock(&data->print);
 			return (true);
 		}
 		i++;
