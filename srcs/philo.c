@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:15:06 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/19 12:54:15 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/20 09:31:35 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ bool	start_threads(t_data *data, t_philo *philo)
 				(void *)&philo[i]) != 0)
 		{
 			data->quit = true;
+			printf("pthread_create fail.\n");
 			pthread_mutex_unlock(&data->lock);
 			cleanup_philo(philo, i - 1);
 			return (false);
@@ -112,8 +113,10 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	if (start_threads(data, philo))
+	{
 		monitoring(philo, data);
-	cleanup_philo(philo, data->num_philos - 1);
+		cleanup_philo(philo, data->num_philos - 1);
+	}
 	free_data(data);
 	return (0);
 }

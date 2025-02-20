@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 17:08:30 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/17 09:29:24 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/20 09:26:01 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,11 @@ pthread_mutex_t	*assign_forks(t_data *data)
 
 static bool	init_mutexes(t_data *data)
 {
-	if (pthread_mutex_init(&data->print, NULL) != 0)
-		return (false);
 	if (pthread_mutex_init(&data->lock, NULL) != 0)
-	{
-		pthread_mutex_destroy(&data->print);
 		return (false);
-	}
 	data->forks = assign_forks(data);
 	if (!data->forks)
 	{
-		pthread_mutex_destroy(&data->print);
 		pthread_mutex_destroy(&data->lock);
 		return (false);
 	}
@@ -55,9 +49,7 @@ static bool	init_mutexes(t_data *data)
 t_data	*init_data(char **av)
 {
 	t_data	*data;
-	int		err;
 
-	err = 0;
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (NULL);
@@ -66,9 +58,7 @@ t_data	*init_data(char **av)
 		free (data);
 		return (NULL);
 	}
-	data->philo_died = false;
 	data->quit = false;
-	data->start = false;
 	if (!init_mutexes(data))
 	{
 		free(data);

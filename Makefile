@@ -44,7 +44,6 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 $(NAME): $(OBJS)
 	@cc $(CFLAGS) $(OBJS) -o $(NAME)
 	@$(OBJ_READY)
-	@chmod 777 $(NAME)
 	@$(MS_READY)
 
 clean:

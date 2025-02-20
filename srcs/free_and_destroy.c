@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 14:33:35 by sniemela          #+#    #+#             */
-/*   Updated: 2025/02/11 14:23:40 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/02/20 09:30:20 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	free_destroy_forks(pthread_mutex_t *forks, int i)
 void	free_data(t_data *data)
 {
 	free_destroy_forks(data->forks, data->num_philos - 1);
-	pthread_mutex_destroy(&data->print);
 	pthread_mutex_destroy(&data->lock);
 	free(data);
 }
