@@ -184,5 +184,12 @@ There's a new usleep logic in the beginning:
 ```
 	gettimeofday(&time, NULL);
 	...
-	usleep(time.tv_usec % 3000 + 1000); ```
+	usleep(time.tv_usec % 3000 + 1000);
+```
 
+----------------------------------------------------------------
+20th of February
+----------------------------------------------------------------
+- I evaluated once yesterday, but decided to withdraw the project and perfect it - it had an invalid free (didn't cause crash) is pthread_create fails.
+- In the current version I've also deleted some unnecessary and unused variables that were left because of sloppiness and the fact that I've worked in several branches.
+- The current version should run efficiently and now leak or double free in any circumstances, BUT that being said: I'm always ready to be called out. :) 
