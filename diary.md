@@ -194,3 +194,7 @@ There's a new usleep logic in the beginning:
 - In the current version I've also deleted some unnecessary and unused variables that were left because of sloppiness and the fact that I've worked in several branches.
 - The current version should run efficiently and now leak or double free in any circumstances, BUT that being said: I'm always ready to be called out. :)
 
+---------------------------------------------------------------
+25th of February
+---------------------------------------------------------------
+- Had the last evaluation (3/3) today and project is finally passed!
